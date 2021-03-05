@@ -4,5 +4,5 @@ basic.forever(function () {
 	
 })
 basic.forever(function () {
-	
+    radio.sendString("")
 })
