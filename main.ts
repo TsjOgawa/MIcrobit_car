@@ -16,7 +16,18 @@ basic.showLeds(`
     `)
 basic.forever(function () {
     let userID = 0
-    maqueen.motorRun(maqueen.Motors.All, maqueen.Dir.CW, 0)
+    if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 0 && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 0) {
+        maqueen.motorRun(maqueen.Motors.All, maqueen.Dir.CW, 255)
+    } else if (false) {
+    	
+    } else if (false) {
+    	
+    } else if (false) {
+    	
+    } else {
+    	
+    }
+    maqueen.motorRun(maqueen.Motors.All, maqueen.Dir.CW, 300)
     radio.sendString("A" + "," + ("" + userID) + "," + ("" + input.acceleration(Dimension.X)) + "," + ("" + input.acceleration(Dimension.Y)) + "," + ("" + input.acceleration(Dimension.Z)))
     radio.sendString("N" + "," + ("" + userID) + "," + ("" + input.compassHeading()))
 })
