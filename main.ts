@@ -1,18 +1,29 @@
 input.onButtonPressed(Button.A, function () {
+    radio.sendString("OK")
+})
+input.onButtonPressed(Button.B, function () {
     if (Mode == 0) {
         Mode = 1
+        basic.showLeds(`
+            . . # . .
+            . . # . .
+            # . # . #
+            # . . . #
+            # # # # #
+            `)
+    } else {
+        Mode = 0
+        basic.showLeds(`
+            . . . . .
+            . # . # .
+            . . # . .
+            . # . # .
+            . . . . .
+            `)
     }
-    basic.showLeds(`
-        . . # . .
-        . . # . .
-        # . # . #
-        # . . . #
-        # # # # #
-        `)
 })
 let Mode = 0
 radio.setGroup(1)
-radio.setTransmitPower(7)
 basic.showLeds(`
     # . . . #
     # # . # #
@@ -46,7 +57,6 @@ basic.forever(function () {
         }
     }
     if (Mode == 1) {
-        radio.sendString("A" + "," + ("" + userID) + "," + ("" + input.acceleration(Dimension.X)) + "," + ("" + input.acceleration(Dimension.Y)) + "," + ("" + input.acceleration(Dimension.Z)))
-        radio.sendString("N" + "," + ("" + userID) + "," + ("" + input.compassHeading()))
+        radio.sendString("A" + "," + ("" + userID) + "," + ("" + input.acceleration(Dimension.X)) + "," + ("" + input.acceleration(Dimension.Y)) + "," + ("" + input.acceleration(Dimension.Z)) + "," + ("" + input.compassHeading()))
     }
 })
