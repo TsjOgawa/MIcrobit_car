@@ -2,17 +2,17 @@ radio.onReceivedString(function (receivedString) {
     Mode = 1
 })
 let Mode = 0
-Mode = 0
-let userID = 0
 radio.setGroup(1)
 radio.setTransmitPower(7)
 basic.showLeds(`
-    # # # # #
     # . . . #
-    # . # . #
-    # . . . #
+    # # . # #
     # # # # #
+    . # # # .
+    . . # . .
     `)
+Mode = 0
+let userID = 0
 basic.forever(function () {
     if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 0 && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 0) {
         maqueen.motorRun(maqueen.Motors.All, maqueen.Dir.CW, 255)
