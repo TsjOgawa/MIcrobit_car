@@ -1,5 +1,14 @@
-radio.onReceivedString(function (receivedString) {
-    Mode = 1
+input.onButtonPressed(Button.A, function () {
+    if (Mode == 0) {
+        Mode = 1
+    }
+    basic.showLeds(`
+        . . # . .
+        . . # . .
+        # . # . #
+        # . . . #
+        # # # # #
+        `)
 })
 let Mode = 0
 radio.setGroup(1)
