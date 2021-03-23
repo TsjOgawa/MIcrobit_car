@@ -48,6 +48,7 @@ basic.forever(function () {
             BLEmode()
         }
         maqueen.motorRun(maqueen.Motors.All, maqueen.Dir.CW, 255)
+        maqueen.servoRun(maqueen.Servos.S1, 30)
     } else if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 0 && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1) {
         if (coner != 1) {
             coner = 1
@@ -96,7 +97,21 @@ basic.forever(function () {
             coner = 3
             BLEmode()
         }
-        maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, 255)
-        maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CCW, 255)
+        maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, 255)
+        maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CCW, 255)
+        if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 0 && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 0) {
+            if (coner != 0) {
+                coner = 0
+                BLEmode()
+            }
+            maqueen.motorRun(maqueen.Motors.All, maqueen.Dir.CW, 255)
+        } else {
+            if (coner != 3) {
+                coner = 3
+                BLEmode()
+            }
+            maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, 255)
+            maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CCW, 255)
+        }
     }
 })
