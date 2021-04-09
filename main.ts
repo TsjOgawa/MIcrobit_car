@@ -3,9 +3,8 @@ input.onButtonPressed(Button.A, function () {
 })
 function BLEmode () {
     if (Mode == 1) {
-        let coner: null = null
-        radio.sendString("A" + "," + coner + "," + input.acceleration(Dimension.X) + "," + input.acceleration(Dimension.Y) + "," + input.acceleration(Dimension.Z))
-        radio.sendString("N" + "," + coner + "," + input.compassHeading())
+        radio.sendString("A" + "," + Mode + "," + input.acceleration(Dimension.X) + "," + input.acceleration(Dimension.Y) + "," + input.acceleration(Dimension.Z))
+        radio.sendString("N" + "," + Old_mode + "," + input.compassHeading())
     }
 }
 input.onButtonPressed(Button.B, function () {
@@ -29,8 +28,8 @@ input.onButtonPressed(Button.B, function () {
             `)
     }
 })
-let Old_mode = 0
 let Mode = 0
+let Old_mode = 0
 radio.setGroup(1)
 basic.showLeds(`
     # . . . #
@@ -44,17 +43,19 @@ let White = 1
 let straight = 0
 let Right = 1
 let Left = 2
+Old_mode = 0
+Mode = 0
 basic.forever(function () {
-    if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == Black && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 0 && Old_mode == straight) {
+    if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == Black && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == Black) {
         maqueen.motorRun(maqueen.Motors.All, maqueen.Dir.CW, 255)
         Old_mode = 0
         BLEmode()
-    } else if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == Black && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == White && Old_mode == Left) {
+    } else if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == Black && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == White) {
         maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CCW, 255)
         maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, 255)
         Old_mode = Left
         BLEmode()
-    } else if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == White && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == Black && Old_mode == Right) {
+    } else if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == White && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == Black) {
         maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, 255)
         maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CCW, 255)
         Old_mode = Right
