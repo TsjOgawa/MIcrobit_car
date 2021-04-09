@@ -3,13 +3,14 @@ input.onButtonPressed(Button.A, function () {
 })
 function BLEmode () {
     if (Mode == 1) {
+        let coner: null = null
         radio.sendString("A" + "," + coner + "," + input.acceleration(Dimension.X) + "," + input.acceleration(Dimension.Y) + "," + input.acceleration(Dimension.Z))
         radio.sendString("N" + "," + coner + "," + input.compassHeading())
     }
 }
 input.onButtonPressed(Button.B, function () {
     if (Mode == 0) {
-        Mode = 1
+        Old_mode = 1
         basic.showLeds(`
             . . # . .
             . . # . .
@@ -18,7 +19,7 @@ input.onButtonPressed(Button.B, function () {
             # # # # #
             `)
     } else {
-        Mode = 0
+        Old_mode = 0
         basic.showLeds(`
             . . . . .
             . # . # .
@@ -28,8 +29,8 @@ input.onButtonPressed(Button.B, function () {
             `)
     }
 })
+let Old_mode = 0
 let Mode = 0
-let coner = 0
 radio.setGroup(1)
 basic.showLeds(`
     # . . . #
@@ -38,82 +39,39 @@ basic.showLeds(`
     . # # # .
     . . # . .
     `)
-coner = 0
-Mode = 0
-let userID = 1
+let Black = 0
+let White = 1
+let straight = 0
+let Right = 1
+let Left = 2
 basic.forever(function () {
-    if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 0 && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 0) {
-        if (coner != 0) {
-            coner = 0
-            BLEmode()
-        }
+    if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == Black && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 0 && Old_mode == straight) {
         maqueen.motorRun(maqueen.Motors.All, maqueen.Dir.CW, 255)
-    } else if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 0 && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1) {
-        if (coner != 1) {
-            coner = 1
-            BLEmode()
-        }
+        Old_mode = 0
+        BLEmode()
+    } else if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == Black && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == White && Old_mode == Left) {
         maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CCW, 255)
         maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, 255)
-        if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1 && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1) {
-            if (coner != 3) {
-                coner = 3
-                BLEmode()
-            }
-            maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, 255)
-            maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CCW, 255)
-        }
-    } else if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1 && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 0) {
-        if (coner != 2) {
-            coner = 2
-            BLEmode()
-        }
+        Old_mode = Left
+        BLEmode()
+    } else if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == White && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == Black && Old_mode == Right) {
         maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, 255)
         maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CCW, 255)
-        if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1 && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1) {
-            if (coner != 3) {
-                coner = 3
-                BLEmode()
-            }
-            maqueen.motorRun(maqueen.Motors.All, maqueen.Dir.CCW, 255)
-            if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1 && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 0) {
-                if (coner != 2) {
-                    coner = 2
-                    BLEmode()
-                }
-                maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, 255)
-            } else {
-                if (coner != 7) {
-                    coner = 7
-                    BLEmode()
-                }
-                maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, 255)
-            }
-        }
-    } else if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1 && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1) {
-        if (coner != 3) {
-            coner = 3
+        Old_mode = Right
+        BLEmode()
+    } else if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == White && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == White) {
+        if (Old_mode == straight) {
             BLEmode()
-        }
-        maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, 255)
-        maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CCW, 255)
-        if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 0 && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 0) {
-            if (coner != 0) {
-                coner = 0
-                BLEmode()
-            }
-            maqueen.motorRun(maqueen.Motors.All, maqueen.Dir.CW, 255)
-        } else if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 1 && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 0) {
+            maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CCW, 255)
+            maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CCW, 30)
+        } else if (Old_mode == Right) {
+            BLEmode()
+            maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CCW, 255)
+            maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, 255)
+        } else if (Old_mode == Left) {
+            BLEmode()
             maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CW, 255)
             maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CCW, 255)
-        } else if (maqueen.readPatrol(maqueen.Patrol.PatrolLeft) == 0 && maqueen.readPatrol(maqueen.Patrol.PatrolRight) == 1) {
-            maqueen.motorRun(maqueen.Motors.M1, maqueen.Dir.CW, 255)
-            maqueen.motorRun(maqueen.Motors.M2, maqueen.Dir.CCW, 255)
-        } else {
-            if (coner != 3) {
-                coner = 3
-                BLEmode()
-            }
         }
     }
 })
